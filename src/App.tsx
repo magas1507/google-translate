@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
-import type { State } from './types';
+import type { Action, State } from './types';
 //1. create inicial state
 const initialState: State = {
   fromLanguage: 'auto',
@@ -12,12 +12,12 @@ const initialState: State = {
 
 //2.create the reducer
 // un reducer siempre tiene que devolver un nuevo estado 
-function reducer(state: State, action) {
+function reducer(state: State, action: Action) {
   //recuperamos el tipo de la action
   //payload: es lo que se envia de información para poder enviar el estado
   const { type, payload } = action
 
-  if (type === 'INTERCHANGE_LANGUAGES') {
+  if (type === 'INTERCHANGE_LANGUAGE') {
     return {
       ...state,
       fromLanguage: state.toLanguage,
