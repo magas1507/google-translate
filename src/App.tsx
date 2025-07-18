@@ -68,7 +68,8 @@ function App() {
 
   }, dispatch] = useReducer(reducer, initialState)
 
-  console.log({ fromLanguage })
+
+  //console.log({ fromLanguage })
   return (
     <>
       <div className='App'>
