@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import type { Action, State } from './types';
+import { useReducer } from 'react'
+
 //1. create inicial state
 const initialState: State = {
   fromLanguage: 'auto',
@@ -15,7 +17,7 @@ const initialState: State = {
 function reducer(state: State, action: Action) {
   //recuperamos el tipo de la action
   //payload: es lo que se envia de información para poder enviar el estado
-  const { type, payload } = action
+  const { type } = action
 
   if (type === 'INTERCHANGE_LANGUAGE') {
     return {
@@ -28,7 +30,7 @@ function reducer(state: State, action: Action) {
   if (type === 'SET_FROM_LANGUAGE') {
     return {
       ...state,
-      FormDataLanguage: action.payload
+      fromLanguage: action.payload
     }
   }
   if (type === 'SET_TO_LANGUAGE') {
@@ -45,6 +47,7 @@ function reducer(state: State, action: Action) {
       result: ''
     }
   }
+
   if (type === 'SET_RESULT') {
     return {
       ...state,
@@ -63,7 +66,7 @@ function App() {
     result,
     loading
 
-  }, dispach] = useReducer(reducer, initialState)
+  }, dispatch] = useReducer(reducer, initialState)
 
   console.log({ fromLanguage })
   return (
@@ -71,8 +74,8 @@ function App() {
       <div className='App'>
         <h1>Google Traslate</h1>
         <button onClick={() => {
-          dispach({ type: 'SET_FROM_LANGUAGE', payload: 'es' })
-        }}></button>
+          dispatch({ type: 'SET_FROM_LANGUAGE', payload: 'es' })
+        }}>Traducir</button>
       </div>
     </>
   )
