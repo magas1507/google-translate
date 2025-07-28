@@ -1,0 +1,109 @@
+ciclo de vida del estado usando useReducer. Está dividido en estas partes:
+
+state (el estado actual)
+
+dispatch (función que lanza acciones)
+
+useReducer (el hook de React)
+
+reducer (la función que genera el nuevo estado)
+
+action (la "orden" que se quiere ejecutar)
+
+initialState (estado inicial que le damos al hook)
+
+🔁 Paso a paso del flujo
+🟪 Paso 1: useReducer recibe dos cosas
+ts
+
+const [state, dispatch] = useReducer(reducer, initialState)
+initialState: El estado inicial del componente (ej: idiomas por defecto, texto vacío, etc).
+
+reducer: Función que sabe cómo transformar el estado según una "acción".
+
+En la imagen, esto está representado por los números 1 (initialState) y 2 (reducer).
+
+🟥 Paso 2: El usuario hace algo → se ejecuta dispatch
+Por ejemplo:
+
+dispatch({ type: 'SET_FROM_LANGUAGE', payload: 'es' })
+Aquí estamos diciendo: “quiero cambiar el idioma de origen a español”.
+
+Esa acción es enviada con dispatch, como se muestra en la imagen.
+
+🟧 Paso 3: El reducer recibe esa acción
+El reducer recibe:
+
+
+(state, action) => { ... }
+Según el type de la acción, el reducer genera un nuevo estado.
+
+📌 Ejemplo:
+
+case 'SET_FROM_LANGUAGE':
+  return {
+    ...state,
+    fromLanguage: action.payload
+  }
+🟩 Paso 4: El estado cambia → se vuelve a renderizar el componente
+Cuando el nuevo estado es devuelto por el reducer, React:
+
+Lo asigna al state.
+
+Vuelve a ejecutar el componente → se refleja el cambio en la UI.
+
+En la imagen: state va al render <Component />.
+
+🔁 Este ciclo se repite cada vez que llamás a dispatch
+Es muy parecido a cómo funciona useState, pero con más control cuando tenés varios estados relacionados.
+
+📌 Resumen visual del ciclo
+useReducer se inicializa con initialState y reducer.
+
+El usuario hace algo → se dispara una action usando dispatch.
+
+El reducer usa la acción y el estado actual para devolver un nuevo estado.
+
+React actualiza el state.
+
+El componente se vuelve a renderizar con los datos nuevos.
+
+typeof
+Sirve para obtener el tipo de una variable, objeto o constante.
+
+const colores = {
+  rojo: '#ff0000',
+  azul: '#0000ff'
+}
+
+type ColoresType = typeof colores
+Aquí, ColoresType sería:
+
+{
+  rojo: string;
+  azul: string;
+}
+🔸 keyof
+Sirve para obtener las claves de un tipo como una unión de strings:
+
+ts
+Copiar
+Editar
+type ColoresKeys = keyof ColoresType
+// Resultado: 'rojo' | 'azul'
+🧠 ¿Qué es keyof typeof?
+Es una combinación que se usa mucho así:
+const colores = {
+  rojo: '#ff0000',
+  azul: '#0000ff',
+  verde: '#00ff00'
+}
+
+type NombreColores = keyof typeof colores
+// Resultado: 'rojo' | 'azul' | 'verde'
+🔧 Es decir:
+
+typeof colores → obtiene el tipo del objeto colores.
+
+keyof ... → extrae las claves de ese tipo.
+

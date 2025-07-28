@@ -1,96 +1,95 @@
-// export function useStore(){
-//    const interchangeLenguage = () => {
-//     dispatch({type: 'INTERCHANGE_LANGUAGE'})
-//   }
-  
-//   const setFromLenguage = payload => {
-//     dispatch({type: 'SET_FROM_LANGUAGE', payload})
-//   }
-
-//   const setToLenguage = payload => {
-//     dispatch({type: 'SET_TO_LANGUAGE', payload})
-//   }
-  
-//   const setFromText = payload => {
-//     dispatch({type: 'SET_From_TEXT', payload})
-//   }
-//   const setResult = payload => {
-//     dispatch({type: 'SET_RESULT', payload})
-//   }
-// }
-// return{
-//   fromLaguage
-// }
-import type { Action, State } from '../types';
-import { useReducer } from 'react'
-import { useStore } from './useStore';
+import type { Action, State } from "../types";
+import { useReducer } from "react";
 
 //1. create inicial state
 const initialState: State = {
-  fromLanguage: 'auto',
-  toLanguage: 'en',
-  fromText: '',
-  result: '',
-  loading: false
-}
+  fromLanguage: "auto",
+  toLanguage: "en",
+  fromText: "",
+  result: "",
+  loading: false,
+};
+
+//2.create the reducer
+// un reducer siempre tiene que devolver un nuevo estado
 function reducer(state: State, action: Action) {
   //recuperamos el tipo de la action
   //payload: es lo que se envia de información para poder enviar el estado
-  const { type } = action
+  const { type } = action;
 
-  if (type === 'INTERCHANGE_LANGUAGE') {
+  if (type === "INTERCHANGE_LANGUAGE") {
     return {
       ...state,
       fromLanguage: state.toLanguage,
-      toLanguage: state.fromLanguage
-    }
+      toLanguage: state.fromLanguage,
+    };
   }
 
-  if (type === 'SET_FROM_LANGUAGE') {
+  if (type === "SET_FROM_LANGUAGE") {
     return {
       ...state,
-      fromLanguage: action.payload
-    }
+      fromLanguage: action.payload,
+    };
   }
-  if (type === 'SET_TO_LANGUAGE') {
+  if (type === "SET_TO_LANGUAGE") {
     return {
       ...state,
-      toLanguage: action.payload
-    }
+      toLanguage: action.payload,
+    };
   }
-  if (type === 'SET_FROM_TEXT') {
+  if (type === "SET_FROM_TEXT") {
     return {
       ...state,
       loading: true,
       fromText: action.payload,
-      result: ''
-    }
+      result: "",
+    };
   }
 
-  if (type === 'SET_RESULT') {
+  if (type === "SET_RESULT") {
     return {
       ...state,
       loading: false,
-      result: action.payload
-    }
+      result: action.payload,
+    };
   }
-  return state
+  return state;
 }
+// no devolvamos directamente el dispatch,porque atamos nuestros componentes a un contrato en concreto porque cuando useStore
+// dentro do hook exporta un contrato que siempre puedas utilizar en cualquier sitio
+export function useStore() {
+  const [{ fromLanguage, toLanguage, fromText, result, loading }, dispatch] =
+    useReducer(reducer, initialState);
 
-export function useStore(){
-  const [{
-      fromLanguage,
-      toLanguage,
-      fromText,
-      result,
-      loading
-  
-    }, dispatch] = useReducer(reducer, initialState)
-  return{
+  const interchangeLanguages = () => {
+    dispatch({ type: "INTERCHANGE_LANGUAGE" })
+  };
+
+  const setFromLanguage = (payload: string) => {
+    dispatch({ type: "SET_FROM_LANGUAGE", payload });
+  };
+
+  const setToLanguage = (payload: string) => {
+    dispatch({ type: "SET_TO_LANGUAGE", payload });
+  };
+
+  const setFromText = (payload: string) => {
+    dispatch({ type: "SET_FROM_TEXT", payload });
+  };
+  const setResult = (payload: string) => {
+    dispatch({ type: "SET_RESULT", payload });
+  };
+
+  return {
     fromLanguage,
     toLanguage,
     fromText,
     result,
     loading,
-  }
+    interchangeLanguages,
+    setFromLanguage,
+    setToLanguage,
+    setFromText,
+    setResult,
+  };
 }
